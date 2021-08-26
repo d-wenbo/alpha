@@ -16,17 +16,12 @@ import math
 args = sys.argv
 
 filename = args[1]
-#img_file = args[4]
+
 pickelefile = args[2]
 picklefile_write = args[3]
 threshold = float(args[4])
 
-'''
-outputname = '0707_for_valid_angle_cluster_diffmodel'
 
-filename = '0707_diffmodel_angle.csv'
-img_file = 'imgs_cut_0707_for_valid'
-'''
 df = pd.read_csv(filename,sep=',')
 
 with open(pickelefile, mode='rb') as f:
@@ -44,14 +39,7 @@ def get_histogram_arrays(list_val, n_bin, x_min, x_max):
 def line_equ(x,a,b):
     y = a*x +b
     return y
-'''
-new_dir_path = outputname
-os.makedirs(new_dir_path,exist_ok = True)
-new_dir_path_graph = new_dir_path + '/' + 'hist/'
-os.makedirs(new_dir_path_graph,exist_ok = True)
-new_dir_path_color = new_dir_path + '/' + 'hist_colorbar/'
-os.makedirs(new_dir_path_color,exist_ok=True)
-'''
+
 
 
 if __name__ == "__main__":   
@@ -97,17 +85,7 @@ if __name__ == "__main__":
                 
         
         fig = plt.figure()
-        '''
-        plt.scatter(list_x,list_y,s = 10,c = list_score_cluster_d,cmap ='inferno',vmin = 0,vmax = 1.0)
-        #plt.scatter(list_x_label1_1,list_y_label1_1,s = 10,c = "r")        
-        plt.xlim(0,255)
-        plt.ylim(0,255)
-        plt.colorbar()
-        plt.imshow(img)
-        plt.savefig(new_dir_path_color + str(name))
-        plt.clf()
-        '''
-
+        
 
 
     
@@ -131,15 +109,7 @@ if __name__ == "__main__":
     
     print(num_detected)
     print(len(num_detected))
-    '''
-    plt.hist(num_detected, bins=np.arange(10)+0.5,align='mid')
-    plt.xticks(np.linspace(0,10,11))
-    plt.title('num of detected')
-    plt.xlabel('frequency')
-    plt.ylabel('num')
-    plt.tight_layout()
-    fig.savefig(new_dir_path_graph + 'hist_num_detected.png')
-    '''
+    
     with open(picklefile_write,'wb') as n:
         pickle.dump(num_detected, n)
 
