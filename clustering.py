@@ -28,8 +28,8 @@ args = sys.argv
 
 
 filename_d = args[1]
-outputname = args[2]
-picklename = args[3]
+#outputname = args[2]
+picklename = args[2]
 '''
   
 filename_d = '0707_for_valid_angle.csv'
@@ -37,12 +37,12 @@ outputname = '0707_for_valid_angle'
 '''
 
 df_d = pd.read_csv(filename_d,sep=',')
-
+'''
 new_dir_path = outputname
 os.makedirs(new_dir_path,exist_ok = True)
 new_dir_path_graph = new_dir_path + '/' + 'hist/'
 os.makedirs(new_dir_path_graph,exist_ok = True)
-
+'''
 if __name__ == "__main__":
 
     

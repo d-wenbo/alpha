@@ -22,15 +22,15 @@ def search_list(list,num):
 
 
 args = sys.argv
-
+'''
 filename = 'alpha_AREA07.csv'
 output_file = 'test.csv'
-
-
 '''
+
+
 filename = args[1]
 output_file = args[2]
-'''
+
 df_m = pd.read_csv(filename,sep=',')
 
 f = open(output_file, 'w')
@@ -154,7 +154,7 @@ if __name__ == "__main__":
         if img_name in dict_for_label1:
 
             list_info_label1 = dict_for_label1[img_name]["info"]
-            print(list_info_label1)
+            #print(list_info_label1)
             for info_1 in list_info_label1:
                 x = info_1["x"]
                 y = info_1["y"]
