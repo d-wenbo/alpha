@@ -68,7 +68,7 @@ if __name__ == "__main__":
     fig = plt.figure()
     
     
-    sigma = 2 * 2.6
+    sigma =  2.6
     
     
   
@@ -94,6 +94,7 @@ if __name__ == "__main__":
 
 
     dict_cluster = {}
+    
     for name in dict_file_d:
         list_per_name = dict_file_d_clu[name]
         info = {'angle':[],'score':[]}
