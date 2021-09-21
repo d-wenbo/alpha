@@ -68,7 +68,7 @@ if __name__ == "__main__":
     fig = plt.figure()
     
     
-    sigma =  2.6
+    sigma =  2.6 * 2
     
     
   
