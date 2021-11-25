@@ -1,38 +1,55 @@
+from re import T
 import numpy as np
 import random
 import os
 import sys
 import glob
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import csv
-from scipy.stats import norm
-from scipy.optimize import curve_fit
 import pickle
 import pandas as pd
 import cv2
 import math
 
+
+
+def searchnum(list,min,max):
+    num_sur = 0
+    for n in list:
+        if min <= n <= max:
+            num_sur+=1
+    return num_sur
+
+
 args = sys.argv
 
 
 
-pickelefile = args[1]
-picklefile_write = args[2]
-txtfile = args[3]
-threshold = float(args[4])
 
+
+debug = False
+
+
+
+pickelefile = args[1]
+
+
+threshold = 0.7
+
+
+sigma_multi = 2.0
+txtfile = args[2]
 
 t = open(txtfile, 'w')
+
 
 with open(pickelefile, mode='rb') as f:
     dict_cluster = pickle.load(f)
     
-plt.rcParams['font.size'] = 14
 
-def func(x, a, mu, sigma,c):
+
+def func(x, a, mu, sigma):
     
-    return a * np.exp(- (x - mu) ** 2 / (2 * sigma ** 2 )) + c
+    return a * np.exp(- (x - mu) ** 2 / (2 * sigma ** 2 )) 
 def get_histogram_arrays(list_val, n_bin, x_min, x_max):
     bin_heights, bin_borders = np.histogram(list_val, n_bin, (x_min, x_max))
     bin_middles = 0.5*(bin_borders[1:] + bin_borders[:-1])
@@ -40,55 +57,51 @@ def get_histogram_arrays(list_val, n_bin, x_min, x_max):
 def line_equ(x,a,b):
     y = a*x +b
     return y
-
+#os.makedirs(picklefile_write,exist_ok = True)
 
 
 if __name__ == "__main__":   
    
     
-    
-    
-    
-    
-    for name in dict_cluster:
-        
-        list_angle_cluster_d = dict_cluster[name]["angle"]
-        list_score_cluster_d = dict_cluster[name]["score"]
-        
-        
-        
-
-        
     num_detected = []
     
-    line_min = 2
-    line_max = 6
-    num = 1
+    
+    alpha_mean = 44.17
+    alpha_sigma = 14.41
+    dist_max = alpha_mean + (sigma_multi * alpha_sigma)
+    dist_min = alpha_mean - (sigma_multi * alpha_sigma)
     list_score_all = []
+    list_dist_above = []
+    j = 0
     for name in dict_cluster:
-        
+        num = 0
+        err = 0
         list_angle_cluster_d = dict_cluster[name]["angle"]
         list_score_cluster_d = dict_cluster[name]["score"]
+        list_dist_cluster_d = dict_cluster[name]["dist"]
         list_score_all.extend(list_score_cluster_d)
-        
-        arr_score_cluster_d = np.array(list_score_cluster_d)
-        #print(arr_score_cluster_d.size)
-        arr_score_cluster_d_rm= np.delete(arr_score_cluster_d,np.where(arr_score_cluster_d<threshold))
-        num_detected.append(arr_score_cluster_d_rm.size)
-        #print(arr_score_cluster_d_rm.size)
-        if line_min <= arr_score_cluster_d_rm.size <= line_max :
-            print(num,name)
-            t.write(name + '\n')
-            num +=1
-    print(num_detected)
-    print(len(num_detected))
-    #print(list_score_all)
-    with open(picklefile_write,'wb') as n:
-        pickle.dump(num_detected, n)
-    with open('not_vertex_score.pickle','wb') as g:
-        pickle.dump(list_score_all, g)    
 
+        for score,dist in zip(list_score_cluster_d,list_dist_cluster_d):
+            if score >= threshold:
+                list_dist_above.append(dist)
+                
+                
+                if dist_min < dist and dist_max > dist:
+                    num +=1 
+                           
+                else:
+                    err += 1   
+        if err < 2 and 1<= num <= 5:
+
+            num_detected.append(num)
+            t.write(name + '\n')
+        else :
+            num_detected.append(0)
+            
         
+    qualify = searchnum(num_detected,1,5)
+
+    
         
     
     
